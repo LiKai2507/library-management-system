@@ -67,59 +67,62 @@ Vue.js Frontend  →  Express RESTful API  →  MySQL Database
 ## 專案結構
 
 ```text
-LibraryManagementSystem
-├── backend
-│   ├── middleware
-│   │   ├── adminAuth.js
-│   │   ├── auth.js
-│   │   └── optionalAuth.js
-│   ├── routes
-│   │   ├── admin.js
-│   │   ├── books.js
-│   │   ├── reservations.js
-│   │   └── user.js
-│   ├── db.js
-│   ├── server.js
-│   ├── Dockerfile
-│   ├── package.json
-│   ├── package-lock.json
-│   └── .env.example
+LibraryManagementSystem/
+├── backend/                        # 後端服務，負責 API 與資料庫連線
+│   ├── middleware/                 # Express 中介層
+│   │   ├── adminAuth.js            # 管理員權限驗證
+│   │   ├── auth.js                 # 使用者登入驗證
+│   │   └── optionalAuth.js         # 選擇性登入驗證
+│   │
+│   ├── routes/                     # API 路由
+│   │   ├── admin.js                # 管理員相關 API
+│   │   ├── books.js                # 書籍查詢與詳情 API
+│   │   ├── reservations.js         # 預約相關 API
+│   │   └── user.js                 # 使用者、借閱與會員相關 API
+│   │
+│   ├── db.js                       # MySQL 資料庫連線設定
+│   ├── server.js                   # Express 伺服器入口
+│   ├── Dockerfile                  # 後端 Docker 設定
+│   ├── package.json                # 後端套件設定
+│   ├── package-lock.json           # 後端套件版本鎖定
+│   └── .env.example                # 環境變數範例
 │
-├── db
-│   ├── Dockerfile
-│   └── init.sql
+├── db/                             # 資料庫初始化設定
+│   ├── Dockerfile                  # MySQL Docker 設定
+│   └── init.sql                    # 資料表與初始資料
 │
-├── frontend
-│   ├── public
+├── frontend/                       # 前端 Vue 專案
+│   ├── public/                     # 靜態公開資源
 │   │   └── vite.svg
-│   ├── src
-│   │   ├── assets
+│   │
+│   ├── src/                        # 前端主要程式碼
+│   │   ├── assets/                 # 圖片與靜態資源
 │   │   │   └── images.png
-│   │   ├── components
-│   │   │   └── Navbar.vue
-│   │   ├── router
+│   │   ├── components/             # 共用元件
+│   │   │   └── Navbar.vue          # 導覽列元件
+│   │   ├── router/                 # Vue Router 設定
 │   │   │   └── index.js
-│   │   ├── views
-│   │   │   ├── AdminPanel.vue
-│   │   │   ├── BookDetail.vue
-│   │   │   ├── Home.vue
-│   │   │   ├── Login.vue
-│   │   │   ├── Register.vue
-│   │   │   └── UserDashboard.vue
-│   │   ├── App.vue
-│   │   ├── main.js
-│   │   └── style.css
-│   ├── .gitignore
-│   ├── Dockerfile
-│   ├── index.html
-│   ├── package.json
-│   ├── package-lock.json
-│   └── vite.config.js
+│   │   ├── views/                  # 頁面元件
+│   │   │   ├── AdminPanel.vue      # 管理員後台
+│   │   │   ├── BookDetail.vue      # 書籍詳細頁
+│   │   │   ├── Home.vue            # 首頁
+│   │   │   ├── Login.vue           # 登入頁
+│   │   │   ├── Register.vue        # 註冊頁
+│   │   │   └── UserDashboard.vue   # 會員中心
+│   │   ├── App.vue                 # Vue 根元件
+│   │   ├── main.js                 # Vue 入口檔
+│   │   └── style.css               # 全站樣式
+│   │
+│   ├── .gitignore                  # 前端忽略檔設定
+│   ├── Dockerfile                  # 前端 Docker 設定
+│   ├── index.html                  # Vite HTML 入口
+│   ├── package.json                # 前端套件設定
+│   ├── package-lock.json           # 前端套件版本鎖定
+│   └── vite.config.js              # Vite 設定
 │
-├── .gitignore
-├── docker-compose.yml
-└── README.md
-```
+├── .gitignore                      # Git 忽略設定
+├── docker-compose.yml              # 前後端與資料庫容器編排
+└── README.md                       # 專案說明文件
 
 ## 前端頁面說明
 
