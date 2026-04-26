@@ -1,89 +1,232 @@
-# 專案概況 (Project Summary)
+# Library Management System
 
-## 1. 網站功能 (Website Functions)
-本專案是一個圖書館管理系統，主要功能包含：
-- **首頁 (Home)**: 瀏覽圖書館藏書及最新資訊。
-- **書籍詳情 (Book Detail)**: 查看書籍詳細資訊，可能包含借閱狀態。
-- **使用者認證**: 包含使用者註冊 (Register) 與登入 (Login) 功能。
-- **一般使用者介面 (User Dashboard)**: 一般使用者可查看個人借閱紀錄、預約狀況或管理個人資料。
-- **管理員後台 (Admin Panel)**: 管理員專用的介面，用於管理書籍（新增、刪除）、管理使用者及查看借閱狀況。
+本專案是一個前後端分離的圖書館管理系統，使用 Vue.js、Node.js / Express、MySQL 與 Docker Compose 開發。系統支援會員註冊登入、館藏查詢、書籍借閱與預約、會員中心，以及管理員後台的館藏、借閱紀錄與會員管理功能。
 
-## 2. 所使用的前端 Framework (Frontend Framework)
-- **核心框架**: Vue.js 3 (使用 Composition API 與 `<script setup>`)
-- **建構工具**: Vite
-- **路由管理**: Vue Router 4
-- **CSS 框架**: Bootstrap 5 (依賴 `bootstrap` 套件)
-- **HTTP 請求**: Axios
+## 專案特色
 
-## 3. 網頁所使用的組件 (Web Components)
-主要分為頁面視圖 (Views) 與共用組件 (Components)：
+- 採用前後端分離架構，前端負責畫面與操作流程，後端提供 RESTful API。
+- 使用 MySQL 儲存會員、書籍、借閱、預約與罰款相關資料。
+- 透過 Docker Compose 整合 frontend、backend、database 三個服務。
+- 支援一般使用者與管理員兩種角色，提供不同操作權限與功能介面。
 
-### 頁面視圖 (Views)
-位於 `frontend/src/views/`：
-- **Home.vue**: 首頁
-- **BookDetail.vue**: 書籍詳細頁面
-- **Login.vue**: 登入頁面
-- **Register.vue**: 註冊頁面
-- **UserDashboard.vue**: 一般使用者介面(會員中心)
-- **AdminPanel.vue**: 管理員後台介面
+## 系統架構
 
-### 共用組件 (Components)
-位於 `frontend/src/components/`：
-- **Navbar.vue**: 導覽列，處理網站導航與登入/登出狀態顯示。
+```text
+Vue.js Frontend  →  Express RESTful API  →  MySQL Database
+        Docker Compose 統一啟動 frontend / backend / db 三個服務
+```
 
-## 4. 資料儲存方式 (Data Storage)
-- **資料庫**: MySQL
-- **連線驅動**: 後端使用 `mysql2` 套件連接資料庫。
-- **部署方式**: 透過 Docker Container 運行 MySQL 服務 (`library_mysql`)，相關設定位於 `docker-compose.yml`。
+## 使用技術
 
-## 5. 運行方式 (How to Run)
-本專案透過 **Docker Compose** 進行容器化部署，將前端、後端與資料庫整合為三個獨立的服務容器，實現了一鍵啟動的現代化開發環境。
+### Frontend
 
-詳細運行架構如下：
-- **服務編排 (Orchestration)**: `docker-compose.yml` 定義了 `frontend` (Vue)、`backend` (Express) 與 `db` (MySQL) 三個服務，並自動處理服務間的網路連線與啟動順序。
-- **環境隔離**: 所有依賴 (如 Node.js 套件、MySQL 資料庫) 皆封裝在 Docker 容器內，確保開發環境與本機系統隔離，避免版本衝突。
-- **熱重載 (Hot Reload)**: 前後端服務皆掛載了本地目錄 (Volumes)，當您修改程式碼時，容器內的服務會即時偵測並更新，無需重新啟動容器，大幅提升開發效率。
-- **資料持久化**: 資料庫設有 Volume 掛載，確保容器重啟或移除後，圖書館的書籍與使用者資料依然保留（除非使用 `-v` 參數強制刪除）。
+- Vue.js 3
+- Vite
+- Vue Router
+- Axios
+- Bootstrap 5
+- HTML / CSS
 
+### Backend
 
-## 6. 執行指令 (Execution Commands)
-確保您的電腦已安裝 [Docker Desktop](https://www.docker.com/products/docker-desktop/)，接著在專案根目錄開啟終端機 (Terminal) 並執行以下指令：
+- Node.js
+- Express
+- RESTful API
+- JSON Web Token / Middleware 驗證
+- mysql2
 
-### 啟動專案
+### Database / Deployment
+
+- MySQL
+- Docker
+- Docker Compose
+
+## 主要功能
+
+### 一般使用者功能
+
+- 會員註冊與登入
+- 瀏覽圖書館藏書
+- 查看書籍詳細資訊
+- 借閱書籍
+- 預約書籍
+- 取消預約
+- 書籍續借
+- 查看個人借閱紀錄、預約狀態與罰款狀態
+
+### 管理員功能
+
+- 新增書籍
+- 刪除書籍
+- 查看所有借閱紀錄
+- 處理還書
+- 核銷罰款
+- 查看會員列表
+- 註銷會員帳號
+
+## 專案結構
+
+```text
+LibraryManagementSystem
+├── backend
+│   ├── middleware
+│   │   ├── adminAuth.js
+│   │   ├── auth.js
+│   │   └── optionalAuth.js
+│   ├── routes
+│   │   ├── admin.js
+│   │   ├── books.js
+│   │   ├── reservations.js
+│   │   └── user.js
+│   ├── db.js
+│   ├── server.js
+│   ├── Dockerfile
+│   ├── package.json
+│   ├── package-lock.json
+│   └── .env.example
+│
+├── db
+│   ├── Dockerfile
+│   └── init.sql
+│
+├── frontend
+│   ├── public
+│   │   └── vite.svg
+│   ├── src
+│   │   ├── assets
+│   │   │   └── images.png
+│   │   ├── components
+│   │   │   └── Navbar.vue
+│   │   ├── router
+│   │   │   └── index.js
+│   │   ├── views
+│   │   │   ├── AdminPanel.vue
+│   │   │   ├── BookDetail.vue
+│   │   │   ├── Home.vue
+│   │   │   ├── Login.vue
+│   │   │   ├── Register.vue
+│   │   │   └── UserDashboard.vue
+│   │   ├── App.vue
+│   │   ├── main.js
+│   │   └── style.css
+│   ├── .gitignore
+│   ├── Dockerfile
+│   ├── index.html
+│   ├── package.json
+│   ├── package-lock.json
+│   └── vite.config.js
+│
+├── .gitignore
+├── docker-compose.yml
+└── README.md
+```
+
+## 前端頁面說明
+
+| 頁面 / 元件 | 說明 |
+|---|---|
+| `Home.vue` | 首頁，顯示館藏書籍列表與基本查詢功能 |
+| `BookDetail.vue` | 書籍詳細頁面，提供借閱與預約操作 |
+| `Login.vue` | 使用者登入頁面 |
+| `Register.vue` | 使用者註冊頁面 |
+| `UserDashboard.vue` | 會員中心，顯示借閱紀錄、預約狀態與罰款資訊 |
+| `AdminPanel.vue` | 管理員後台，提供館藏、借閱與會員管理功能 |
+| `Navbar.vue` | 共用導覽列，處理頁面導覽與登入狀態顯示 |
+
+## 資料儲存方式
+
+本系統使用 MySQL 作為主要資料庫，後端透過 `mysql2` 套件連接資料庫。資料庫服務由 Docker Compose 建立與管理，並透過 `db/init.sql` 初始化基本資料表與測試資料。
+
+資料庫主要負責儲存：
+
+- 使用者資料
+- 書籍資料
+- 借閱紀錄
+- 預約紀錄
+- 罰款狀態
+- 管理員相關操作資料
+
+## 執行方式
+
+請先確認電腦已安裝 Docker Desktop。
+
+### 1. 複製專案
+
+```bash
+git clone https://github.com/LiKai2507/library-management-system.git
+cd library-management-system
+```
+
+### 2. 建立後端環境變數檔案
+
+請在 `backend` 資料夾內建立 `.env` 檔案，或參考 `.env.example`。
+
+範例：
+
+```env
+DB_HOST=db
+DB_USER=root
+DB_PASSWORD=your_password
+DB_NAME=library_db
+DB_PORT=3306
+JWT_SECRET=your_jwt_secret
+PORT=3000
+```
+
+### 3. 啟動專案
+
 ```bash
 docker-compose up --build
 ```
-此指令會重新建置 Docker 映像檔並啟動所有服務 (Frontend, Backend, Database)。
-- 前端網址: http://localhost:8080
-- 後端 API: http://localhost:3000
 
-### 停止專案
+啟動後可開啟：
+
+```text
+Frontend: http://localhost:8080
+Backend API: http://localhost:3000
+```
+
+### 4. 停止專案
+
 ```bash
 docker-compose down
 ```
-此指令會停止並移除相關的 Containers。
+
+如果要同時刪除資料庫 Volume：
+
 ```bash
 docker-compose down -v
 ```
-此指令會停止並移除相關的 Containers，並刪除所有相關的 Volumes。
 
-## 7. 在這個專案所有的API弄表格 (All APIs in this project)
+## API 一覽表
 
-| 網址 (URL) | Method | 用途 (Usage) | 在哪個Vue中 (Used in Vue) |
-| :--- | :--- | :--- | :--- |
-| `/api/register` | POST | 使用者註冊 (User Register) | `Register.vue` |
-| `/api/login` | POST | 使用者登入 (User Login) | `Login.vue` |
-| `/api/loans/status` | GET | 取得個人借閱/預約/罰款狀態 | `UserDashboard.vue` |
-| `/api/user/renew/:loanId` | POST | 書籍續借 (Renew Book) | `UserDashboard.vue` |
-| `/api/reservations/:id` | DELETE | 取消預約 (Cancel Reservation) | `UserDashboard.vue`, `BookDetail.vue` |
-| `/api/books` | GET | 取得書籍列表 (Get Books) | `Home.vue`, `AdminPanel.vue` |
-| `/api/books/:id` | GET | 取得書籍詳細資訊 (Get Book Detail) | `BookDetail.vue` |
-| `/api/loans/borrow` | POST | 借閱書籍 (Borrow Book) | `BookDetail.vue` |
-| `/api/reservations` | POST | 預約書籍 (Reserve Book) | `BookDetail.vue` |
-| `/api/admin/books` | POST | 新增書籍 (Add Book - Admin) | `AdminPanel.vue` |
-| `/api/admin/books/:id` | DELETE | 刪除書籍 (Delete Book - Admin) | `AdminPanel.vue` |
-| `/api/admin/return/:loanId` | POST | 管理員還書 (Return Book - Admin) | `AdminPanel.vue` |
-| `/api/admin/loans` | GET | 取得所有借閱紀錄 (Get All Loans - Admin) | `AdminPanel.vue` |
-| `/api/admin/clear-fine/:loanId` | POST | 核銷罰款 (Clear Fine - Admin) | `AdminPanel.vue` |
-| `/api/admin/users` | GET | 取得會員列表 (Get Users - Admin) | `AdminPanel.vue` |
-| `/api/admin/users/:id/deactivate` | PATCH | 註銷會員 (Deactivate User - Admin) | `AdminPanel.vue` |
+| URL | Method | 用途 | 使用頁面 |
+|---|---|---|---|
+| `/api/register` | POST | 使用者註冊 | `Register.vue` |
+| `/api/login` | POST | 使用者登入 | `Login.vue` |
+| `/api/loans/status` | GET | 取得個人借閱、預約與罰款狀態 | `UserDashboard.vue` |
+| `/api/user/renew/:loanId` | POST | 書籍續借 | `UserDashboard.vue` |
+| `/api/reservations/:id` | DELETE | 取消預約 | `UserDashboard.vue`, `BookDetail.vue` |
+| `/api/books` | GET | 取得書籍列表 | `Home.vue`, `AdminPanel.vue` |
+| `/api/books/:id` | GET | 取得書籍詳細資訊 | `BookDetail.vue` |
+| `/api/loans/borrow` | POST | 借閱書籍 | `BookDetail.vue` |
+| `/api/reservations` | POST | 預約書籍 | `BookDetail.vue` |
+| `/api/admin/books` | POST | 新增書籍 | `AdminPanel.vue` |
+| `/api/admin/books/:id` | DELETE | 刪除書籍 | `AdminPanel.vue` |
+| `/api/admin/return/:loanId` | POST | 管理員還書 | `AdminPanel.vue` |
+| `/api/admin/loans` | GET | 取得所有借閱紀錄 | `AdminPanel.vue` |
+| `/api/admin/clear-fine/:loanId` | POST | 核銷罰款 | `AdminPanel.vue` |
+| `/api/admin/users` | GET | 取得會員列表 | `AdminPanel.vue` |
+| `/api/admin/users/:id/deactivate` | PATCH | 註銷會員 | `AdminPanel.vue` |
+
+## 學習重點
+
+透過本專案練習前後端分離 Web 系統開發，包含 Vue 前端頁面設計、Express API 開發、MySQL 資料表設計、JWT / Middleware 權限驗證，以及 Docker Compose 多服務整合。此專案也強化了 RESTful API 設計、資料庫操作與系統部署流程的實作經驗。
+
+## 後續可改進方向
+
+- 增加書籍搜尋與分類篩選功能
+- 增加表單驗證與錯誤提示
+- 優化管理員後台的資料呈現
+- 加入單元測試或 API 測試
+- 增加系統畫面截圖與 Demo 說明
